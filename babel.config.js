@@ -10,6 +10,7 @@ module.exports = {
           "~/components": "./src/components",
           "~/constants": "./src/constants",
           "~/helpers": "./src/helpers",
+          "~/hooks": "./src/hooks",
           "~/images": "./src/images",
           "~/pages": "./src/pages",
           "~/redux": "./src/redux",

@@ -24,10 +24,6 @@ const BottomTabStack = () => {
                 tabBarStyle: {
                     height: responsiveSize(52),
                     borderTopWidth: 0,
-                    elevation: 0,
-                    shadowOffset: {
-                        width: 0, height: 0
-                    },
                 },
                 tabBarHideOnKeyboard: true,
                 headerShown: false,
