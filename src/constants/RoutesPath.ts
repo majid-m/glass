@@ -4,6 +4,9 @@ const RoutesPath = {
   app: {
     main: 'App',
     home: 'Home',
+    add: 'Add',
+    notification: 'notification',
+    profile: 'Profile',
   },
 };
 

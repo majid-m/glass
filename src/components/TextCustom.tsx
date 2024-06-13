@@ -1,8 +1,8 @@
 import React, { FC, ReactNode } from 'react';
 import { Text, StyleSheet, TextStyle } from 'react-native';
 
-import responsiveSize from '@helpers/responsiveSize';
-import colors from '@styles/colors';
+import responsiveSize from '~/helpers/responsiveSize';
+import colors from '~/styles/colors';
 
 interface IProps {
     children: ReactNode;

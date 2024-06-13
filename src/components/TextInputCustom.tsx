@@ -2,9 +2,9 @@ import { FC } from 'react';
 import { View, StyleSheet, ViewProps } from 'react-native';
 import { TextInput, TextInputProps } from 'react-native-paper';
 
-import TextCustom from '@components/TextCustom';
-import colors from '@styles/colors';
-import responsiveSize from '@helpers/responsiveSize';
+import TextCustom from '~/components/TextCustom';
+import colors from '~/styles/colors';
+import responsiveSize from '~/helpers/responsiveSize';
 import { IconSource } from 'react-native-paper/lib/typescript/components/Icon';
 
 interface IProps extends Omit<TextInputProps, "error"> {

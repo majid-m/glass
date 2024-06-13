@@ -1,20 +1,9 @@
 import { combineReducers } from 'redux';
 import { configureStore } from '@reduxjs/toolkit';
-import createSensitiveStorage from 'redux-persist-sensitive-storage';
 import { persistReducer, persistStore } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import userReducer from '@redux/SliceReducers/UserSlice';
-
-const sensitiveStorage = createSensitiveStorage({
-    keychainService: 'userDataKeyChain',
-    sharedPreferencesName: 'userDataSharedPrefs'
-});
-
-const userDataPersistConfig = {
-    key: 'user',
-    storage: sensitiveStorage,
-};
+import userReducer from '~/redux/SliceReducers/UserSlice';
 
 const mainPersistConfig = {
     key: 'main',
@@ -22,18 +11,12 @@ const mainPersistConfig = {
 };
 
 const mainPersistReducer = combineReducers({
-
-});
-
-const mainReducer = combineReducers({
-
+    userReducer,
 });
 
 const store = configureStore({
     reducer: {
-        userData: persistReducer(userDataPersistConfig, userReducer),
-        // persistData: persistReducer(mainPersistConfig, mainPersistReducer),
-        // main: mainReducer,
+        persistData: persistReducer(mainPersistConfig, mainPersistReducer),
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
         serializableCheck: false,
