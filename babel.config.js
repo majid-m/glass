@@ -13,6 +13,7 @@ module.exports = {
           "~/hooks": "./src/hooks",
           "~/images": "./src/images",
           "~/pages": "./src/pages",
+          "~/redux": "./src/redux",
           "~/stacks": "./src/stacks",
           "~/styles": "./src/styles",
         }

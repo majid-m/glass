@@ -1,18 +1,52 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 
 import TextCustom from '~/components/TextCustom';
-import { IDrinkItem } from '~/models/drink';
 import responsiveSize from '~/helpers/responsiveSize';
 import colors from '~/styles/colors';
+import { useAppDispatch, useAppSelector } from '~/hooks/reduxApp';
+import { addDrink, editDrink } from '~/redux/slices/drinksSlice';
 
 interface IProps {
     id: number | null;
+    onClose: () => void;
 };
 
-const ModalView: FC<IProps> = ({ id }) => {
+const ModalView: FC<IProps> = ({ id, onClose }) => {
+    const reduxDispatch = useAppDispatch();
+
+    const { drinkItems } = useAppSelector(state => state.drinksReducer);
+
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
+
+    useEffect(() => {
+        let drinkItem = drinkItems.find((item) => item.id === id);
+        setTitle(drinkItem?.name ?? "");
+        setDescription(drinkItem?.volume?.toString() ?? "")
+    }, [id]);
+
+    const saveDrinkItem = async () => {
+        if (!!id) {
+            reduxDispatch(editDrink({
+                id,
+                icon: require('../../../images/drop.png'),
+                isActive: false,
+                name: title,
+                volume: Number(description) ?? 0,
+            }))
+        } else {
+            reduxDispatch(addDrink({
+                id: drinkItems.length > 0 ? drinkItems[drinkItems.length - 1]?.id + 1 : 1,
+                icon: require('../../../images/drop.png'),
+                isActive: false,
+                name: title,
+                volume: Number(description) ?? 0,
+            }))
+        };
+
+        onClose();
+    };
 
     return (
         <View style={styles.container}>
@@ -40,10 +74,10 @@ const ModalView: FC<IProps> = ({ id }) => {
             </Pressable>
 
             <View style={[styles.rowView, { marginTop: 24 }]}>
-                <Pressable style={styles.cancelButton}>
+                <Pressable style={styles.cancelButton} onPress={onClose}>
                     <TextCustom style={styles.cancelLabel}>Cancel</TextCustom>
                 </Pressable>
-                <Pressable style={styles.confirmButton}>
+                <Pressable style={styles.confirmButton} onPress={saveDrinkItem}>
                     <TextCustom style={styles.confirmLabel}>Save</TextCustom>
                 </Pressable>
             </View>

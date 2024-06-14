@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { FlatList, Image, Pressable, SafeAreaView, View, useWindowDimensions } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -9,26 +9,22 @@ import WaveImage from '~/images/wave.svg';
 import CalendarImage from '~/images/calendar.svg';
 import EditImage from '~/images/edit.svg';
 import colors from '~/styles/colors';
-import { IDrinkItem } from '~/models/drink';
+import { useAppDispatch, useAppSelector } from '~/hooks/reduxApp';
+import { activeDrink, drinkMinus, drinkPlus } from '~/redux/slices/drinksSlice';
 
 const HomeScreen: FC = () => {
     const { height: screenHeight } = useWindowDimensions();
+    const reduxDispatch = useAppDispatch();
 
-    const [drinkItems, setDrinkItems] = useState<IDrinkItem[]>([
-        {
-            id: 0,
-            name: "Water",
-            volume: 1.5,
-            icon: require('../../images/drop.png'),
-            isActive: false,
-        },
-    ]);
+    const { drinkItems, dirkedVolume, maxVolume } = useAppSelector(state => state.drinksReducer);
+
+    const drinkPercent = useMemo(() => {
+        let completePercent = (dirkedVolume / maxVolume) * 100;
+        return (completePercent >= 100 ? 100 : completePercent);
+    }, [dirkedVolume, maxVolume]);
 
     const drinkPress = (id: number) => {
-        let drinkIndex = drinkItems.findIndex((item) => item.id === id);
-        let drinkItemsNew: IDrinkItem[] = [...drinkItems];
-        drinkItemsNew = drinkItemsNew.map((item, index) => ({ ...item, isActive: (drinkIndex === index) ? true : false }));
-        setDrinkItems(drinkItemsNew);
+        reduxDispatch(activeDrink(id));
     };
 
     return (
@@ -40,11 +36,11 @@ const HomeScreen: FC = () => {
 
             <View style={styles.glassView}>
                 <TextCustom style={styles.LitersLabel}>Liters</TextCustom>
-                <TextCustom style={styles.LitersValue}>2.5</TextCustom>
+                <TextCustom style={styles.LitersValue}>{dirkedVolume}</TextCustom>
                 <GlassImage height={screenHeight * 0.4} style={styles.glassImage} />
                 {/* <WaveImage width='100%' height={screenHeight * 0.2} style={styles.waveImage} /> */}
                 <TextCustom style={styles.PercentText}>
-                    0
+                    {drinkPercent}
                     <TextCustom style={styles.PercentSymbol}>%</TextCustom>
                 </TextCustom>
             </View>
@@ -58,7 +54,7 @@ const HomeScreen: FC = () => {
                         <View style={styles.drinkItem}>
                             <View style={styles.drinkButtonsView}>
                                 {item.isActive &&
-                                    <Pressable>
+                                    <Pressable onPress={() => reduxDispatch(drinkPlus(item.volume))}>
                                         <MaterialIcons name='plus' size={32} color={colors.green} />
                                     </Pressable>
                                 }
@@ -75,7 +71,7 @@ const HomeScreen: FC = () => {
 
                             <View style={styles.drinkButtonsView}>
                                 {item.isActive &&
-                                    <Pressable>
+                                    <Pressable onPress={() => reduxDispatch(drinkMinus(item.volume))}>
                                         <MaterialIcons name='minus' size={32} color={colors.red} />
                                     </Pressable>
                                 }

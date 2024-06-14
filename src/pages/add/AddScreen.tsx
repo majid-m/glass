@@ -4,29 +4,28 @@ import Modal from 'react-native-modal';
 
 import styles from './styles';
 import TextCustom from '~/components/TextCustom';
-import { IDrinkItem } from '~/models/drink';
 import EditImage from '~/images/edit.svg';
 import ModalView from './components/ModalView';
+import { useAppDispatch, useAppSelector } from '~/hooks/reduxApp';
+import { resetDrinks } from '~/redux/slices/drinksSlice';
 
 const AddScreen: FC = () => {
-    const [modalVisible, setModalVisible] = useState<boolean>(true);
+    const reduxDispatch = useAppDispatch();
+
+    const { drinkItems } = useAppSelector(state => state.drinksReducer);
+
+    const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [drinkId, setDrinkId] = useState<number | null>(null);
-    const [drinkItems, setDrinkItems] = useState<IDrinkItem[]>([
-        {
-            id: 0,
-            name: "Water",
-            volume: 1.5,
-            icon: require('../../images/drop.png'),
-            isActive: false,
-        },
-        {
-            id: 1,
-            name: "Coffee",
-            volume: 0.5,
-            icon: require('../../images/drop.png'),
-            isActive: false,
-        },
-    ]);
+
+    const addNewDrink = () => {
+        setDrinkId(null);
+        setModalVisible(true);
+    };
+
+    const editDrink = (id: number) => {
+        setDrinkId(id);
+        setModalVisible(true);
+    };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -36,14 +35,14 @@ const AddScreen: FC = () => {
                 onSwipeComplete={() => setModalVisible(false)}
                 swipeDirection={['up', 'down']}
             >
-                <ModalView id={drinkId} />
+                <ModalView id={drinkId} onClose={() => setModalVisible(false)} />
             </Modal>
 
-            <View style={styles.headerView}>
+            <Pressable style={styles.headerView} onPress={() => reduxDispatch(resetDrinks())}>
                 <TextCustom style={styles.headerLabel}>Resources</TextCustom>
-            </View>
+            </Pressable>
 
-            <TouchableOpacity style={styles.addButton} activeOpacity={0.7}>
+            <TouchableOpacity style={styles.addButton} activeOpacity={0.7} onPress={addNewDrink}>
                 <TextCustom style={styles.addButtonLabel}>Add New Resource</TextCustom>
             </TouchableOpacity>
 
@@ -61,7 +60,7 @@ const AddScreen: FC = () => {
                             </View>
                         </View>
 
-                        <Pressable style={styles.editDrinkItem}>
+                        <Pressable style={styles.editDrinkItem} onPress={() => editDrink(item.id)}>
                             <EditImage width={28} height={28} />
                         </Pressable>
                     </View>

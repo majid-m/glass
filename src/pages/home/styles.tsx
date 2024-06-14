@@ -36,13 +36,13 @@ const styles = StyleSheet.create({
     PercentText: {
         position: 'absolute',
         bottom: responsiveSize(12),
-        fontSize: responsiveSize(48),
+        fontSize: responsiveSize(32),
         fontWeight: '600',
         color: colors.gray,
         zIndex: 2,
     },
     PercentSymbol: {
-        fontSize: responsiveSize(34),
+        fontSize: responsiveSize(24),
         fontWeight: '600',
         color: colors.gray,
     },
