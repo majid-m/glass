@@ -63,8 +63,8 @@ const styles = StyleSheet.create({
 
     },
     drinkImage: {
-        width: responsiveSize(28),
-        height: responsiveSize(28),
+        width: responsiveSize(36),
+        height: responsiveSize(36),
         resizeMode: 'contain',
         marginRight: responsiveSize(12),
     },

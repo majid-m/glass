@@ -53,7 +53,11 @@ const AddScreen: FC = () => {
                 renderItem={({ item }) =>
                     <View style={styles.drinkItem}>
                         <View style={styles.drinkItemLeft}>
-                            <Image source={item.icon} style={styles.drinkImage} />
+                            {!!item.icon ?
+                                <Image source={{ uri: item.icon }} style={styles.drinkImage} />
+                                :
+                                <Image source={require("../../images/drop.png")} style={styles.drinkImage} />
+                            }
                             <View style={styles.columnView}>
                                 <TextCustom style={styles.drinkName}>{item.name}</TextCustom>
                                 <TextCustom style={styles.drinkVolume}>{item.volume} Liter</TextCustom>

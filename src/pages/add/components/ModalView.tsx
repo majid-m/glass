@@ -1,5 +1,6 @@
 import { FC, useState, useEffect } from 'react';
-import { Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { Image, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { launchImageLibrary } from 'react-native-image-picker';
 
 import TextCustom from '~/components/TextCustom';
 import responsiveSize from '~/helpers/responsiveSize';
@@ -19,18 +20,20 @@ const ModalView: FC<IProps> = ({ id, onClose }) => {
 
     const [title, setTitle] = useState<string>("");
     const [description, setDescription] = useState<string>("");
+    const [iconUri, setIconUri] = useState<string>("");
 
     useEffect(() => {
         let drinkItem = drinkItems.find((item) => item.id === id);
         setTitle(drinkItem?.name ?? "");
         setDescription(drinkItem?.volume?.toString() ?? "")
+        setIconUri(drinkItem?.icon ?? "");
     }, [id]);
 
     const saveDrinkItem = async () => {
         if (!!id) {
             reduxDispatch(editDrink({
                 id,
-                icon: require('../../../images/drop.png'),
+                icon: iconUri,
                 isActive: false,
                 name: title,
                 volume: Number(description) ?? 0,
@@ -38,7 +41,7 @@ const ModalView: FC<IProps> = ({ id, onClose }) => {
         } else {
             reduxDispatch(addDrink({
                 id: drinkItems.length > 0 ? drinkItems[drinkItems.length - 1]?.id + 1 : 1,
-                icon: require('../../../images/drop.png'),
+                icon: iconUri,
                 isActive: false,
                 name: title,
                 volume: Number(description) ?? 0,
@@ -46,6 +49,13 @@ const ModalView: FC<IProps> = ({ id, onClose }) => {
         };
 
         onClose();
+    };
+
+    const addIcon = async () => {
+        const result = await launchImageLibrary({ mediaType: 'photo' });
+        if (!!result.assets && result.assets.length > 0) {
+            setIconUri(result.assets[0].uri ?? "");
+        }
     };
 
     return (
@@ -56,12 +66,14 @@ const ModalView: FC<IProps> = ({ id, onClose }) => {
             <View style={styles.rowView}>
                 <TextInput
                     style={styles.inputs}
+                    placeholderTextColor={colors.gray}
                     placeholder='Title'
                     value={title}
                     onChangeText={setTitle}
                 />
                 <TextInput
                     style={[styles.inputs, { marginLeft: 16 }]}
+                    placeholderTextColor={colors.gray}
                     placeholder='Description'
                     keyboardType='numeric'
                     value={description}
@@ -69,9 +81,13 @@ const ModalView: FC<IProps> = ({ id, onClose }) => {
                 />
             </View>
 
-            <Pressable style={styles.uploadButton}>
+            <Pressable style={styles.uploadButton} onPress={addIcon}>
                 <TextCustom style={styles.uploadLabel}>+Upload Icon</TextCustom>
             </Pressable>
+
+            {!!iconUri &&
+                <Image style={styles.iconImage} source={{ uri: iconUri }} />
+            }
 
             <View style={[styles.rowView, { marginTop: 24 }]}>
                 <Pressable style={styles.cancelButton} onPress={onClose}>
@@ -118,6 +134,7 @@ const styles = StyleSheet.create({
         borderColor: colors.gray,
         borderRadius: responsiveSize(8),
         padding: responsiveSize(8),
+        color: colors.text,
     },
     uploadButton: {
         alignSelf: 'flex-start',
@@ -129,9 +146,15 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         color: colors.primary,
     },
+    iconImage: {
+        alignSelf: 'flex-start',
+        width: responsiveSize(64),
+        height: responsiveSize(64),
+        resizeMode: 'contain',
+    },
     cancelButton: {
         flex: 1,
-        padding: responsiveSize(4),
+        padding: responsiveSize(8),
         borderWidth: 2,
         borderColor: colors.primary,
         borderRadius: responsiveSize(8),
@@ -144,7 +167,7 @@ const styles = StyleSheet.create({
     },
     confirmButton: {
         flex: 1,
-        padding: responsiveSize(4),
+        padding: responsiveSize(8),
         backgroundColor: colors.primary,
         borderWidth: 2,
         borderColor: colors.primary,

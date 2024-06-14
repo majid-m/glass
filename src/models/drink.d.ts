@@ -1,9 +1,8 @@
-import { ImageSourcePropType } from 'react-native';
 
-interface IDrinkItem {
+export interface IDrinkItem {
     id: number;
     name: string;
-    icon: ImageSourcePropType;
+    icon: string;
     volume: number;
     isActive: boolean;
 };

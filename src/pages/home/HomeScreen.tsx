@@ -64,7 +64,11 @@ const HomeScreen: FC = () => {
                                 style={[styles.drinkButton, { borderColor: item.isActive ? colors.blue : colors.text }]}
                                 onPress={() => drinkPress(item.id)}
                             >
-                                <Image source={item.icon} style={styles.drinkImage} />
+                                {!!item.icon ?
+                                    <Image source={{ uri: item.icon }} style={styles.drinkImage} />
+                                    :
+                                    <Image source={require("../../images/drop.png")} style={styles.drinkImage} />
+                                }
                                 <TextCustom style={styles.drinkName}>{item.name}</TextCustom>
                                 <TextCustom style={styles.drinkVolume}>{item.volume} Liter</TextCustom>
                             </Pressable>

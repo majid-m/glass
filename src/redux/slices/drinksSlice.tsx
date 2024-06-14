@@ -5,7 +5,7 @@ import { IDrinkItem } from '~/models/drink';
 const initialState: { drinkItems: IDrinkItem[], dirkedVolume: number, maxVolume: number } = {
     drinkItems: [],
     dirkedVolume: 0,
-    maxVolume: 20,
+    maxVolume: 50,
 };
 
 const drinksSlice = createSlice({
@@ -17,7 +17,6 @@ const drinksSlice = createSlice({
         },
         editDrink: (state, action: { payload: IDrinkItem }) => {
             let drinkIndex: number = state.drinkItems.findIndex((item) => item.id === action.payload.id);
-            console.log(drinkIndex)
             state.drinkItems[drinkIndex] = action.payload;
         },
         activeDrink: (state, action: { payload: number }) => {
