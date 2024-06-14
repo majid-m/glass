@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { FlatList, Image, ImageSourcePropType, Pressable, SafeAreaView, View, useWindowDimensions } from 'react-native';
+import { FlatList, Image, Pressable, SafeAreaView, View, useWindowDimensions } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import styles from './styles';
@@ -22,7 +22,7 @@ const HomeScreen: FC = () => {
             icon: require('../../images/drop.png'),
             isActive: false,
         },
-    ])
+    ]);
 
     const drinkPress = (id: number) => {
         let drinkIndex = drinkItems.findIndex((item) => item.id === id);
