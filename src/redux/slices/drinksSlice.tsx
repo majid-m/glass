@@ -5,7 +5,7 @@ import { IDrinkItem } from '~/models/drink';
 const initialState: { drinkItems: IDrinkItem[], dirkedVolume: number, maxVolume: number } = {
     drinkItems: [],
     dirkedVolume: 0,
-    maxVolume: 50,
+    maxVolume: 100,
 };
 
 const drinksSlice = createSlice({

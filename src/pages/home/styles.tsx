@@ -38,13 +38,11 @@ const styles = StyleSheet.create({
         bottom: responsiveSize(12),
         fontSize: responsiveSize(32),
         fontWeight: '600',
-        color: colors.gray,
         zIndex: 2,
     },
     PercentSymbol: {
         fontSize: responsiveSize(24),
         fontWeight: '600',
-        color: colors.gray,
     },
     bottomView: {
         marginTop: responsiveSize(16),

@@ -1,6 +1,7 @@
-import { FC, useMemo, useState } from 'react';
+import { FC, useMemo, useRef, useState } from 'react';
 import { FlatList, Image, Pressable, SafeAreaView, View, useWindowDimensions } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import LottieView from "lottie-react-native";
 
 import styles from './styles';
 import TextCustom from '~/components/TextCustom';
@@ -16,10 +17,20 @@ const HomeScreen: FC = () => {
     const { height: screenHeight } = useWindowDimensions();
     const reduxDispatch = useAppDispatch();
 
+    const animationRef = useRef<LottieView>(null);
+
     const { drinkItems, dirkedVolume, maxVolume } = useAppSelector(state => state.drinksReducer);
+    const [currentFrame, setCurrentFrame] = useState<number>(0);
 
     const drinkPercent = useMemo(() => {
-        let completePercent = (dirkedVolume / maxVolume) * 100;
+        let animationFrame = Math.floor((dirkedVolume / maxVolume) * 75);
+        if (animationFrame > 75) {
+            animationFrame = 75;
+        };
+        animationRef.current?.play(currentFrame, animationFrame);
+        setCurrentFrame(animationFrame);
+
+        let completePercent = Math.floor((dirkedVolume / maxVolume) * 100);
         return (completePercent >= 100 ? 100 : completePercent);
     }, [dirkedVolume, maxVolume]);
 
@@ -37,11 +48,17 @@ const HomeScreen: FC = () => {
             <View style={styles.glassView}>
                 <TextCustom style={styles.LitersLabel}>Liters</TextCustom>
                 <TextCustom style={styles.LitersValue}>{dirkedVolume}</TextCustom>
-                <GlassImage height={screenHeight * 0.4} style={styles.glassImage} />
+                <LottieView
+                    ref={animationRef}
+                    style={{ width: "100%", height: screenHeight * 0.4 }}
+                    source={require("../../images/glass.json")}
+                    loop={false}
+                />
+                {/* <GlassImage height={screenHeight * 0.4} style={styles.glassImage} /> */}
                 {/* <WaveImage width='100%' height={screenHeight * 0.2} style={styles.waveImage} /> */}
-                <TextCustom style={styles.PercentText}>
+                <TextCustom style={styles.PercentText} color={drinkPercent > 25 ? colors.background : colors.gray}>
                     {drinkPercent}
-                    <TextCustom style={styles.PercentSymbol}>%</TextCustom>
+                    <TextCustom style={styles.PercentSymbol} color={drinkPercent > 25 ? colors.background : colors.gray}>%</TextCustom>
                 </TextCustom>
             </View>
 

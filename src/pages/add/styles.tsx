@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
     flatListStyle: {
         paddingTop: responsiveSize(16),
         paddingBottom: responsiveSize(16),
+        paddingHorizontal: responsiveSize(2),
     },
     separator: {
         height: responsiveSize(12),

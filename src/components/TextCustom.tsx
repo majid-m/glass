@@ -6,14 +6,16 @@ import colors from '~/styles/colors';
 interface IProps {
     children: ReactNode;
     style?: TextStyle;
+    color?: TextStyle["color"];
 };
 
-const TextCustom: FC<IProps> = ({ children, style, ...rest }) => {
+const TextCustom: FC<IProps> = ({ children, style, color, ...rest }) => {
     return (
         <Text
             style={[
                 styles.defaultStyle,
                 style,
+                !!color && { color },
             ]}
             {...rest}
         >
