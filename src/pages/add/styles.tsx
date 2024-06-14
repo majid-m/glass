@@ -8,6 +8,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: responsiveSize(16),
         paddingVertical: responsiveSize(16),
     },
+    modalView: {
+        justifyContent: 'flex-end',
+        margin: 0,
+    },
     headerView: {
         alignItems: 'center',
         padding: responsiveSize(12),

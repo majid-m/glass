@@ -1,12 +1,16 @@
 import { FC, useState } from 'react';
 import { FlatList, Image, Pressable, SafeAreaView, TouchableOpacity, View } from 'react-native';
+import Modal from 'react-native-modal';
 
 import styles from './styles';
 import TextCustom from '~/components/TextCustom';
 import { IDrinkItem } from '~/models/drink';
 import EditImage from '~/images/edit.svg';
+import ModalView from './components/ModalView';
 
 const AddScreen: FC = () => {
+    const [modalVisible, setModalVisible] = useState<boolean>(true);
+    const [drinkId, setDrinkId] = useState<number | null>(null);
     const [drinkItems, setDrinkItems] = useState<IDrinkItem[]>([
         {
             id: 0,
@@ -26,6 +30,15 @@ const AddScreen: FC = () => {
 
     return (
         <SafeAreaView style={styles.container}>
+            <Modal
+                style={styles.modalView}
+                isVisible={modalVisible}
+                onSwipeComplete={() => setModalVisible(false)}
+                swipeDirection={['up', 'down']}
+            >
+                <ModalView id={drinkId} />
+            </Modal>
+
             <View style={styles.headerView}>
                 <TextCustom style={styles.headerLabel}>Resources</TextCustom>
             </View>
